@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Conexión al servidor gRPC
-	conn, err := grpc.Dial("10.35.169.11:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial("10.35.169.12:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Error al conectar: %v", err)
 	}
@@ -27,6 +27,6 @@ func main() {
 		log.Fatalf("Error al llamar al servicio SayHello: %v", err)
 	}
 
-	// Imprimir la respuesta del servidor
+	// Imprimir la respuesta del servidor2
 	fmt.Println("Respuesta del servidor:", response.Message)
 }
