@@ -29,7 +29,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 	// Registrar el servicio Greeter en el servidor
-	pb.RegisterGeneralServer()
+	pb.RegisterGeneralServer(s, &server{})
 	// Iniciar servidor
 	log.Println("Servidor gRPC iniciado en localhost:50051")
 	if err := s.Serve(lis); err != nil {
