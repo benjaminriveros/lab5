@@ -24,7 +24,18 @@ func enviarComandoBroken(c pb.GeneralClient, tipo string, ns string, nb string, 
 		log.Fatalf("Error al enviar comando: %v", err)
 		return false
 	}
-	fmt.Printf("broken indica enviar a ip: %s\n", resp.Ip)
+	fmt.Printf("El comando se enviará al servidor en %s\n", resp.Ip)
+
+	// Iniciar conexión con servior en resp.Ip
+	conn, err := grpc.Dial(resp.Ip, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Error al conectar: %v", err)
+	}
+	defer conn.Close()
+	// Crear un cliente gRPC
+	sf := pb.NewGeneralClient(conn)
+	// Enviar comando a Servidor Fulcrum
+	sf.RegisterCommand(context.Background(), request)
 	return true
 }
 

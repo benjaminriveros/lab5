@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package code;
 option go_package = "./proto";
+import "google/protobuf/empty.proto";
 
 message Command {
     string tipo = 1;
@@ -16,5 +17,6 @@ message Ip {
 
 service General {
     rpc sendCommand (Command) returns (Ip) {}
+    rpc registerCommand (Command) returns (google.protobuf.Empty) {}
 }
 
