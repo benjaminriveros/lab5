@@ -1,4 +1,4 @@
-ssh benjamin.riveros@capela.inf.usm.santiago.cl 
+ssh benjamin.riveros@capela.inf.santiago.usm.cl 
 D0d3c43dr0.
 
 ssh dist@dist001.inf.santiago.usm.cl - aFVJLxjFHBs7 - 10.35.169.11
@@ -13,3 +13,9 @@ ssh dist@dist004.inf.santiago.usm.cl - C2TAccKgQjn8  - 10.35.169.14
 compilar .proto
 protoc --go_out=. --go_opt=paths=source_relative proto/com.proto
 protoc --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/com.proto
+
+Empujar cambios:
+git add .
+git commit -m "Update"
+git push
+

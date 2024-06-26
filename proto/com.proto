@@ -3,15 +3,18 @@ syntax = "proto3";
 package code;
 option go_package = "./proto";
 
-message HelloRequest {
-    string name = 1;
+message Command {
+    string tipo = 1;
+    string ns = 2;
+    string nb = 3;
+    string valor = 4;
 }
 
-message HelloReply {
-    string message = 1;
+message Ip {
+    string ip = 1;
 }
 
-service Greeter {
-    rpc SayHello (HelloRequest) returns (HelloReply) {}
+service General {
+    rpc sendCommand (Command) returns (Ip) {}
 }
 

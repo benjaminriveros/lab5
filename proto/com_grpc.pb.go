@@ -18,86 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// GreeterClient is the client API for Greeter service.
+// GeneralClient is the client API for General service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type GreeterClient interface {
-	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
+type GeneralClient interface {
+	SendCommand(ctx context.Context, in *Command, opts ...grpc.CallOption) (*Ip, error)
 }
 
-type greeterClient struct {
+type generalClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewGreeterClient(cc grpc.ClientConnInterface) GreeterClient {
-	return &greeterClient{cc}
+func NewGeneralClient(cc grpc.ClientConnInterface) GeneralClient {
+	return &generalClient{cc}
 }
 
-func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
-	out := new(HelloReply)
-	err := c.cc.Invoke(ctx, "/code.Greeter/SayHello", in, out, opts...)
+func (c *generalClient) SendCommand(ctx context.Context, in *Command, opts ...grpc.CallOption) (*Ip, error) {
+	out := new(Ip)
+	err := c.cc.Invoke(ctx, "/code.General/sendCommand", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// GreeterServer is the server API for Greeter service.
-// All implementations must embed UnimplementedGreeterServer
+// GeneralServer is the server API for General service.
+// All implementations must embed UnimplementedGeneralServer
 // for forward compatibility
-type GreeterServer interface {
-	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
-	mustEmbedUnimplementedGreeterServer()
+type GeneralServer interface {
+	SendCommand(context.Context, *Command) (*Ip, error)
+	mustEmbedUnimplementedGeneralServer()
 }
 
-// UnimplementedGreeterServer must be embedded to have forward compatible implementations.
-type UnimplementedGreeterServer struct {
+// UnimplementedGeneralServer must be embedded to have forward compatible implementations.
+type UnimplementedGeneralServer struct {
 }
 
-func (UnimplementedGreeterServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (UnimplementedGeneralServer) SendCommand(context.Context, *Command) (*Ip, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendCommand not implemented")
 }
-func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
+func (UnimplementedGeneralServer) mustEmbedUnimplementedGeneralServer() {}
 
-// UnsafeGreeterServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to GreeterServer will
+// UnsafeGeneralServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to GeneralServer will
 // result in compilation errors.
-type UnsafeGreeterServer interface {
-	mustEmbedUnimplementedGreeterServer()
+type UnsafeGeneralServer interface {
+	mustEmbedUnimplementedGeneralServer()
 }
 
-func RegisterGreeterServer(s grpc.ServiceRegistrar, srv GreeterServer) {
-	s.RegisterService(&Greeter_ServiceDesc, srv)
+func RegisterGeneralServer(s grpc.ServiceRegistrar, srv GeneralServer) {
+	s.RegisterService(&General_ServiceDesc, srv)
 }
 
-func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloRequest)
+func _General_SendCommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Command)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterServer).SayHello(ctx, in)
+		return srv.(GeneralServer).SendCommand(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/code.Greeter/SayHello",
+		FullMethod: "/code.General/sendCommand",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterServer).SayHello(ctx, req.(*HelloRequest))
+		return srv.(GeneralServer).SendCommand(ctx, req.(*Command))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Greeter_ServiceDesc is the grpc.ServiceDesc for Greeter service.
+// General_ServiceDesc is the grpc.ServiceDesc for General service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Greeter_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "code.Greeter",
-	HandlerType: (*GreeterServer)(nil),
+var General_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "code.General",
+	HandlerType: (*GeneralServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _Greeter_SayHello_Handler,
+			MethodName: "sendCommand",
+			Handler:    _General_SendCommand_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

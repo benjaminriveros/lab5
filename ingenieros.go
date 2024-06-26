@@ -10,23 +10,34 @@ import (
 	"google.golang.org/grpc"
 )
 
+func enviarComandoBroken(c pb.GeneralClient, tipo string, ns string, nb string, valor string) bool {
+	request := &pb.Command{
+		Tipo:  tipo,
+		Ns:    ns,
+		Nb:    nb,
+		Valor: valor,
+	}
+
+	// Llamar al servicio gRPC para enviar el comando
+	resp, err := c.SendCommand(context.Background(), request)
+	if err != nil {
+		log.Fatalf("Error al enviar comando: %v", err)
+		return false
+	}
+	fmt.Printf("broken indica enviar a ip: %s\n", resp.Ip)
+	return true
+}
+
 func main() {
 	// Conexión al servidor gRPC
-	conn, err := grpc.Dial("10.35.169.12:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial("10.35.169.11:50050", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Error al conectar: %v", err)
 	}
 	defer conn.Close()
-
 	// Crear un cliente gRPC
-	c := pb.NewGreeterClient(conn)
+	bkn := pb.NewGeneralClient(conn)
 
-	// Llamar al servicio SayHello
-	response, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: "Mundo"})
-	if err != nil {
-		log.Fatalf("Error al llamar al servicio SayHello: %v", err)
-	}
-
-	// Imprimir la respuesta del servidor2
-	fmt.Println("Respuesta del servidor:", response.Message)
+	// Terminal indica enviar mensaje
+	enviarComandoBroken(bkn, "probando", "probando", "probando", "probando")
 }
