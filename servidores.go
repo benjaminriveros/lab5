@@ -95,7 +95,7 @@ func main() {
 	}
 	ultimoDigito := ipLocal[len(ipLocal)-1]
 	idServidor = int(ultimoDigito) - 2
-	fmt.Println("IP local del servidor:%s, con id %d", ipLocal, idServidor)
+	fmt.Printf("IP local del servidor:%s, con id %d", ipLocal, idServidor)
 
 	// Crear un servidor gRPC
 	lis, err := net.Listen("tcp", ":50030")

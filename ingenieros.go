@@ -59,9 +59,6 @@ func main() {
 	// Crear un cliente gRPC
 	bkn := pb.NewGeneralClient(conn)
 
-	// Terminal indica enviar mensaje
-	enviarComandoBroken(bkn, "probando", "probando", "probando", "probando")
-
 	// Iniciar interfaz con usuario
 	scanner := bufio.NewScanner(os.Stdin)
 	continuar := true
