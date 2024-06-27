@@ -63,20 +63,20 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	continuar := true
 	for continuar {
-		fmt.Println("Digite acción a realizar\n")
-		fmt.Println("'1' para enviar comando\n")
-		fmt.Println("'2' para finalizar\n>>")
+		fmt.Printf("Digite acción a realizar\n")
+		fmt.Printf("'1' para enviar comando\n")
+		fmt.Printf("'2' para finalizar\n>>")
 		scanner.Scan()
 		input := scanner.Text()
 		if input == "1" {
 			var tipo, nomsec, nombas, valor string
-			fmt.Println("\nComando (1:Agregar Base, 2:Renombrar Base, 3:Actualizar Valor o Borrar Base): ")
+			fmt.Printf("\nComando (1:Agregar Base, 2:Renombrar Base, 3:Actualizar Valor, 4:Borrar Base): ")
 			fmt.Scan(&tipo)
-			fmt.Println("\nNombre del sector: ")
+			fmt.Printf("\nNombre del sector: ")
 			fmt.Scan(&nomsec)
-			fmt.Println("\nNombre de la base: ")
+			fmt.Printf("\nNombre de la base: ")
 			fmt.Scan(&nombas)
-			fmt.Println("\nValor/Nuevo nombre/Nuevo valor/0: ")
+			fmt.Printf("\nValor/Nuevo nombre/Nuevo valor/0: ")
 			fmt.Scan(&valor)
 			enviarComandoBroken(bkn, tipo, nomsec, nombas, valor)
 			fmt.Println("\n Comando enviado. ")

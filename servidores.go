@@ -35,7 +35,7 @@ func getVecData(filename string) ([]int32, bool) {
 // Metodo grpc
 func (s *server) RegisterCommand(ctx context.Context, req *pb.Command) (*pb.Vector, error) {
 	// Crear o abrir el archivo
-	filename := req.Ns + ".txt"
+	filename := "txts/" + req.Ns + ".txt"
 	file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		fmt.Println("Error al abrir/crear el archivo:", err)
@@ -97,7 +97,7 @@ func main() {
 
 	// Restarle 2 al último dígito
 	idServidor = ultimoDigito - 2
-	fmt.Printf("IP local del servidor:%s, con id %d", ipLocal, idServidor)
+	fmt.Printf("IP local del servidor:%s, con id %d\n", ipLocal, idServidor)
 
 	// Crear un servidor gRPC
 	lis, err := net.Listen("tcp", ":50030")
