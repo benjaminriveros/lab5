@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package code;
 option go_package = "./proto";
-import "google/protobuf/empty.proto";
 
 message Command {
     string tipo = 1;
@@ -15,8 +14,14 @@ message Ip {
     string ip = 1;
 }
 
+message Vector {
+    int32 Sv1 = 1;
+    int32 Sv2 = 2;
+    int32 Sv3 = 3;
+}
+
 service General {
     rpc sendCommand (Command) returns (Ip) {}
-    rpc registerCommand (Command) returns (google.protobuf.Empty) {}
+    rpc registerCommand (Command) returns (Vector) {}
 }
 

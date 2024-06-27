@@ -5,24 +5,73 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	pb "code/proto"
 
-	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 )
 
 const ipCoordinador = "10.35.169.13"
 
+var idServidor int
+var fileDict = make(map[string][]int32)
+
 type server struct {
 	pb.UnimplementedGeneralServer
 }
 
-func (s *server) RegisterCommand(ctx context.Context, req *pb.Command) (*empty.Empty, error) {
-	// Lógica de registro del comando aquí
-	fmt.Printf("registrar en este servidor mensaje: %s\n", req.Ns)
-	// Si no hay errores específicos, retornar nil como error
-	return &empty.Empty{}, nil
+// Función para agregar datos al diccionario
+func dicVectData(filename string, data []int32) {
+	fileDict[filename] = data
+}
+
+// Función para obtener datos del diccionario
+func getVecData(filename string) ([]int32, bool) {
+	data, exists := fileDict[filename]
+	return data, exists
+}
+
+// Metodo grpc
+func (s *server) RegisterCommand(ctx context.Context, req *pb.Command) (*pb.Vector, error) {
+	// Crear o abrir el archivo
+	filename := req.Ns + ".txt"
+	file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		fmt.Println("Error al abrir/crear el archivo:", err)
+		return nil, err // Deberías devolver un error en caso de fallo
+	}
+	defer file.Close()
+	defer file.Close()
+	line := req.Tipo + " " + req.Ns + " " + req.Nb
+	if req.Tipo == "borrar base" {
+		line = line + " " + req.Valor
+	}
+	// Escribir en el archivo
+	_, err = file.WriteString(line + "\n") // Asegúrate de agregar un salto de línea al final
+	if err != nil {
+		fmt.Println("Error al escribir en el archivo:", err)
+		return nil, err // Devuelve un error si ocurre algún problema al escribir
+	}
+	// Actualizar o inicializar el vector en memoria
+	vector, exists := getVecData(filename)
+	fmt.Printf("vector actual en servidor %d, %s: [%d, %d, %d]\n", idServidor, filename, vector[0], vector[1], vector[2])
+	if !exists {
+		// Inicializar vector si no existe
+		vector = []int32{0, 0, 0}
+	}
+	vector[idServidor]++ // Incrementar el contador para el servidor actual
+	// Guardar o actualizar el vector en memoria
+	dicVectData(filename, vector)
+	// Preparar la respuesta a retornar
+	retorno := &pb.Vector{
+		Sv1: vector[0],
+		Sv2: vector[1],
+		Sv3: vector[2],
+	}
+	// Retornar la respuesta y nil como error (si no hay errores específicos)
+
+	return retorno, nil
 }
 
 func main() {
@@ -44,7 +93,9 @@ func main() {
 	if ipLocal == "" {
 		log.Fatal("No se pudo determinar la dirección IP local")
 	}
-	fmt.Println("IP local del servidor:", ipLocal)
+	ultimoDigito := ipLocal[len(ipLocal)-1]
+	idServidor = int(ultimoDigito) - 2
+	fmt.Println("IP local del servidor:%s, con id %d", ipLocal, idServidor)
 
 	// Crear un servidor gRPC
 	lis, err := net.Listen("tcp", ":50030")
@@ -55,7 +106,7 @@ func main() {
 	// Registrar el servicio General en el servidor
 	pb.RegisterGeneralServer(s, &server{})
 	// Iniciar el servidor
-	log.Println("Servidor gRPC iniciado en localhost:50051")
+	log.Println("Servidor gRPC iniciado en localhost:50030")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Error al servir: %v", err)
 	}
