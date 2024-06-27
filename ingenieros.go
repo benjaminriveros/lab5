@@ -62,22 +62,34 @@ func main() {
 	// Iniciar interfaz con usuario
 	scanner := bufio.NewScanner(os.Stdin)
 	continuar := true
+
 	for continuar {
-		fmt.Printf("Digite acción a realizar\n")
-		fmt.Printf("'1' para enviar comando\n")
-		fmt.Printf("'2' para finalizar\n>>")
+		fmt.Println("Digite acción a realizar")
+		fmt.Println("'1' para enviar comando")
+		fmt.Println("'2' para finalizar")
+		fmt.Print(">> ")
+
 		scanner.Scan()
 		input := scanner.Text()
+
 		if input == "1" {
 			var tipo, nomsec, nombas, valor string
-			fmt.Printf("\nComando (1:Agregar Base, 2:Renombrar Base, 3:Actualizar Valor, 4:Borrar Base): ")
-			fmt.Scan(&tipo)
-			fmt.Printf("\nNombre del sector: ")
-			fmt.Scan(&nomsec)
-			fmt.Printf("\nNombre de la base: ")
-			fmt.Scan(&nombas)
-			fmt.Printf("\nValor/Nuevo nombre/Nuevo valor/0: ")
-			fmt.Scan(&valor)
+			fmt.Print("\n*USE SOLO MINUSCULAS")
+			fmt.Print("\nTipo comando: ")
+			scanner.Scan()
+			tipo = scanner.Text()
+
+			fmt.Print("\nNombre del sector: ")
+			scanner.Scan()
+			nomsec = scanner.Text()
+
+			fmt.Print("\nNombre de la base: ")
+			scanner.Scan()
+			nombas = scanner.Text()
+
+			fmt.Print("\nValor/Nuevo nombre/Nuevo valor/0: ")
+			scanner.Scan()
+			valor = scanner.Text()
 			enviarComandoBroken(bkn, tipo, nomsec, nombas, valor)
 			fmt.Println("\n Comando enviado. ")
 		} else if input == "2" {
