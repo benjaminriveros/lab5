@@ -93,8 +93,10 @@ func main() {
 	if ipLocal == "" {
 		log.Fatal("No se pudo determinar la dirección IP local")
 	}
-	ultimoDigito := ipLocal[len(ipLocal)-1]
-	idServidor = int(ultimoDigito) - 2
+	ultimoDigito := int(ipLocal[len(ipLocal)-1] - '0')
+
+	// Restarle 2 al último dígito
+	idServidor = ultimoDigito - 2
 	fmt.Printf("IP local del servidor:%s, con id %d", ipLocal, idServidor)
 
 	// Crear un servidor gRPC
