@@ -60,7 +60,7 @@ func (s *server) RegisterCommand(ctx context.Context, req *pb.Command) (*pb.Vect
 	}
 	vector[idServidor]++ // Incrementar el contador para el servidor actual
 	// Guardar o actualizar el vector en memoria
-	fmt.Printf("vector luego de escritura %d, %s: [%d, %d, %d]\n", idServidor, filename, vector[0], vector[1], vector[2])
+	fmt.Printf("nuevo vector de  %s en SvId:%d, [%d, %d, %d]\n", filename, idServidor, vector[0], vector[1], vector[2])
 	dicVectData(filename, vector)
 	// Preparar la respuesta a retornar
 	retorno := &pb.Vector{
