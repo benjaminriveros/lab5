@@ -19,5 +19,6 @@ git add .
 git commit -m "Update"
 git push
 
+
 Descargar cambios:
 git pull

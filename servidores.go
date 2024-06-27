@@ -42,9 +42,8 @@ func (s *server) RegisterCommand(ctx context.Context, req *pb.Command) (*pb.Vect
 		return nil, err // Deberías devolver un error en caso de fallo
 	}
 	defer file.Close()
-	defer file.Close()
 	line := req.Tipo + " " + req.Ns + " " + req.Nb
-	if req.Tipo == "borrar base" {
+	if req.Tipo != "borrar base" {
 		line = line + " " + req.Valor
 	}
 	// Escribir en el archivo
@@ -55,13 +54,13 @@ func (s *server) RegisterCommand(ctx context.Context, req *pb.Command) (*pb.Vect
 	}
 	// Actualizar o inicializar el vector en memoria
 	vector, exists := getVecData(filename)
-	fmt.Printf("vector actual en servidor %d, %s: [%d, %d, %d]\n", idServidor, filename, vector[0], vector[1], vector[2])
 	if !exists {
 		// Inicializar vector si no existe
 		vector = []int32{0, 0, 0}
 	}
 	vector[idServidor]++ // Incrementar el contador para el servidor actual
 	// Guardar o actualizar el vector en memoria
+	fmt.Printf("vector luego de escritura %d, %s: [%d, %d, %d]\n", idServidor, filename, vector[0], vector[1], vector[2])
 	dicVectData(filename, vector)
 	// Preparar la respuesta a retornar
 	retorno := &pb.Vector{

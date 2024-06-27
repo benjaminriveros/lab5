@@ -90,6 +90,10 @@ func main() {
 			fmt.Print("\nValor/Nuevo nombre/Nuevo valor/0: ")
 			scanner.Scan()
 			valor = scanner.Text()
+
+			if tipo == "borrar base" {
+				valor = "N.A."
+			}
 			enviarComandoBroken(bkn, tipo, nomsec, nombas, valor)
 			fmt.Println("\n Comando enviado. ")
 		} else if input == "2" {
